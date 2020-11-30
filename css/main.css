@@ -1,0 +1,250 @@
+html {
+    width: 100%;
+}
+
+body {
+    overflow-x: hidden !important;
+}
+
+
+/* Hide everything under body tag */
+
+body.show-spinner>* {
+    opacity: 0;
+}
+
+
+/* Spinner */
+
+body.show-spinner::before {
+    content: " ";
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    border-top-color: rgba(0, 0, 0, 0.3);
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+    left: calc(50% - 15px);
+    top: calc(50% - 15px);
+    position: fixed;
+    z-index: 1;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+
+/* loader... */
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #9370DB;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BA55D3;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #FF00FF;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+/* customize */
+
+.error {
+    color: red;
+}
+
+div.scrollable {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+a.disabledupdemp {
+    pointer-events: none;
+    cursor: default;
+    color: #303030;
+}
+
+.modal {
+    overflow-y: auto;
+}
+
+
+/* FULLCALENDAR */
+
+div.fc-time {
+    background: #919191 !important;
+    color: #fff !important;
+    font-weight: bold !important;
+    text-align: left !important;
+}
+
+div.fc-title {
+    text-align: left !important;
+}
+
+.clsllego {
+    background: #b7d09a;
+    color: #41611d;
+}
+
+
+/*responsive fullcalendar*/
+
+
+/* Extra small devices (phones, 600px and down) */
+
+@media only screen and (max-width: 600px) {
+    #contentDescriptores {
+        display: none;
+    }
+    div.fc-right {
+        display: none;
+    }
+    body .fc {
+        font-size: 0.8em !important;
+    }
+}
+
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+
+@media only screen and (min-width: 600px) {
+    #contentDescriptores {
+        display: none;
+    }
+    div.fc-right {
+        display: none;
+    }
+    body .fc {
+        font-size: 0.8em !important;
+    }
+}
+
+
+/* Medium devices (landscape tablets, 768px and up) */
+
+@media only screen and (min-width: 768px) {
+    #contentDescriptores {
+        display: block;
+    }
+    div.fc-right {
+        display: block;
+    }
+    body .fc {
+        font-size: 1em !important;
+    }
+}
+
+
+/* Large devices (laptops/desktops, 992px and up) */
+
+@media only screen and (min-width: 992px) {
+    #contentDescriptores {
+        display: block;
+    }
+    div.fc-right {
+        display: block;
+    }
+    body .fc {
+        font-size: 1em !important;
+    }
+}
+
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+
+@media only screen and (min-width: 1200px) {
+    #contentDescriptores {
+        display: block;
+    }
+    div.fc-right {
+        display: block;
+    }
+    body .fc {
+        font-size: 1em !important;
+    }
+}
+
+.no-pt{
+    padding-top: 0px;
+}

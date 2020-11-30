@@ -1,0 +1,136 @@
+CREATE DATABASE IF NOT EXISTS HOTEL
+
+use hotel 
+
+CREATE TABLE PANTALLA
+(
+idPantalla INT NOT NULL,
+DescripPantalla VARCHAR(45),
+URL VARCHAR(45),
+CONSTRAINT PK_idPantalla PRIMARY KEY (idPantalla)  
+)
+
+CREATE TABLE ROL
+(
+idRol INT NOT NULL,
+Descripcion VARCHAR(45),
+CONSTRAINT PK_idRol PRIMARY KEY (idRol)  
+)
+
+CREATE TABLE ESTATUS
+(
+idEstatus INT NOT NULL,
+DescripEstatus VARCHAR(45),
+CONSTRAINT PK_idEstatus PRIMARY KEY (idEstatus)  
+)
+
+CREATE TABLE EDIFICIO
+(
+idEdificio INT NOT NULL,
+DescripEdificio VARCHAR(45),
+CONSTRAINT PK_idEdificio PRIMARY KEY (idEdificio)  
+)
+
+CREATE TABLE VISTA
+(
+idVista INT NOT NULL,
+DescripVista VARCHAR(45),
+CONSTRAINT PK_idVista PRIMARY KEY (idVista)  
+)
+
+CREATE TABLE TIPOHABITACION
+(
+idTipoHabitacion INT NOT NULL,
+DescripTipoHabitacion VARCHAR(45),
+PRECIO DECIMAL(12,2),
+CAPACIDAD INT,
+CONSTRAINT PK_idTipoHabitacion PRIMARY KEY (idTipoHabitacion)  
+)
+
+CREATE TABLE USUARIO
+(
+idUsuario INT NOT NULL,
+Nombre VARCHAR(45),
+APaterno VARCHAR(45),
+AMaterno VARCHAR(45),
+idRol INT,
+CONSTRAINT PK_idUsuario PRIMARY KEY (idUsuario),
+CONSTRAINT FK_idRol FOREIGN KEY(idRol) references ROL (idRol)
+)
+
+CREATE TABLE CLIENTE
+(
+idCliente INT NOT NULL,
+Nombre VARCHAR(45),
+APaterno VARCHAR(45),
+AMaterno VARCHAR(45),
+idUsuario INT,
+FechaRegistro DATE,
+CONSTRAINT PK_idCliente PRIMARY KEY (idCliente),
+CONSTRAINT FK_idUsuario FOREIGN KEY(idUsuario) references USUARIO (idUsuario)
+)
+
+CREATE TABLE ROL_PANTALLA
+(
+idConfig INT NOT NULL,
+idRol INT,
+idPantalla INT,
+CONSTRAINT PK_idConfig PRIMARY KEY (idConfig),
+CONSTRAINT FK_idRolx FOREIGN KEY(idRol) references ROL (idRol),
+CONSTRAINT FK_idPantallax FOREIGN KEY(idPantalla) references PANTALLA (idPantalla)
+)
+
+CREATE TABLE ESTATUS_RESERVACION
+(
+idEstatusReservacion INT NOT NULL,
+DescripEstatusReservacion VARCHAR (45),
+CONSTRAINT PK_idEstatusReservacion PRIMARY KEY (idEstatusReservacion)
+)
+
+CREATE TABLE HABITACION
+(
+idHabitacion INT NOT NULL,
+DescripHabitacion VARCHAR(45),
+Nivel VARCHAR(45),
+idTipoHabitacion INT,
+idEdificio INT, 
+idVista INT, 
+idUsuario INT, 
+idEstatus INT,
+CONSTRAINT PK_idHabitacion PRIMARY KEY (idHabitacion),
+CONSTRAINT FK_idTipoHabitacion FOREIGN KEY(idTipoHabitacion) references TIPOHABITACION (idTipoHabitacion),
+CONSTRAINT FK_idEdificio FOREIGN KEY(idEdificio) references EDIFICIO (idEdificio),
+CONSTRAINT FK_idVista FOREIGN KEY(idVista) references VISTA (idVista),
+CONSTRAINT FK_idUsuariox FOREIGN KEY(idUsuario) references USUARIO (idUsuario),
+CONSTRAINT FK_idEstatus FOREIGN KEY(idEstatus) references ESTATUS (idEstatus)
+)
+
+CREATE TABLE RESERVACION
+(
+idReservacion INT NOT NULL,
+idUsuario INT, 
+idCliente INT,
+idHabitacion INT,
+FechaInicio DATE,
+FechaFin DATE,
+Monto DECIMAL (12,2),
+FechaReservacion DATE,
+idEstatusReservacion INT,
+CONSTRAINT PK_idReservacion PRIMARY KEY (idReservacion),
+CONSTRAINT FK_idUsuari FOREIGN KEY(idUsuario) references USUARIO (idUsuario),
+CONSTRAINT FK_idCliente FOREIGN KEY(idCliente) references CLIENTE (idCliente),
+CONSTRAINT FK_idHabitacion FOREIGN KEY(idHabitacion) references HABITACION (idHabitacion),
+CONSTRAINT FK_idEstatusReservacion FOREIGN KEY(idEstatusReservacion) references ESTATUS_RESERVACION (idEstatusReservacion)
+)
+
+CREATE TABLE RESERVACION_DETALLE
+(
+idReservacion INT,
+idCliente INT,
+FechaIN DATE,
+FechaOUT VARCHAR(45),
+idEstatusReservacion INT,
+CONSTRAINT FK_idReservacion FOREIGN KEY (idReservacion) references RESERVACION (idReservacion),
+CONSTRAINT FK_idClient FOREIGN KEY(idCliente) references CLIENTE (idCliente),
+CONSTRAINT FK_idEstatusReservacio FOREIGN KEY(idEstatusReservacion) references ESTATUS_RESERVACION (idEstatusReservacion)
+)
