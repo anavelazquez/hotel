@@ -75,14 +75,15 @@ $( "#btnGuardar" ).click(function() {
             if (isConfirm) {
                 var accion_cat;
                 if (sessionStorage.getItem("accion") == "check_in") {
-                    accion_cat = "check_in";
+                    accion_cat = "registrar_check_in";
                 } else if (sessionStorage.getItem("accion") == "check_out") {
-                    accion_cat = "check_out";
+                    accion_cat = "registrar_check_out";
                 }
+                idreservacionhuesped = sessionStorage.getItem("idreservacionhuesped");
 
-                var form_data = "idreservacionhuesped="+$("#idreservacionhuesped").val()+"&txtControlFechaHoraCheckInOut="+$("#txtControlFechaHoraCheckInOut").val();
+                var form_data = "txtControlFechaHoraCheckInOut="+$("#txtControlFechaHoraCheckInOut").val();
                 var request   = $.ajax({
-                    url:          'http://' + usourl + '/php/checkin-checkout.func.php?job='+accion_cat+'&'+form_data+'&id='+sessionStorage.getItem("idreservacionhuesped"),
+                    url:          'http://' + usourl + '/php/checkin-checkout.func.php?job='+accion_cat+'&'+form_data+'&id='+idreservacionhuesped,
                     cache:        false,
                     dataType:     'json',
                     contentType:  'application/json; charset=utf-8',
@@ -95,7 +96,7 @@ $( "#btnGuardar" ).click(function() {
                             type: "success"
                             },
                             function(){
-                                window.location = "tipos-habitaciones.php";
+                                window.location = "checkin-checkout.php";
                         });
                     } else {
                         swal("Error", "No se pudo realizar la acción", "error");

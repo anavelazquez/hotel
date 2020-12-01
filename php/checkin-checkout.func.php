@@ -36,7 +36,7 @@ if ($job != ''){
   // Execute job
   if ($job == 'get_reservaciones_detalle'){
     $query =  "SELECT reservacion_huespedes.id_reservacion_huesped, nombre_edificio, numero_habitacion, nombre_huesped, edad_huesped, fecha_inicio, fecha_fin, fecha_reservacion, fecha_check_in, fecha_check_out
-      FROM reservacion_huespedes           
+      FROM reservacion_huespedes
       INNER JOIN reservacion ON reservacion.id_reservacion = reservacion_huespedes.id_reservacion
       INNER JOIN reservacion_detalle ON reservacion_detalle.id_reservacion_huesped = reservacion_huespedes.id_reservacion_huesped
       INNER JOIN habitaciones ON reservacion.id_habitacion = habitaciones.id_habitacion
@@ -52,7 +52,7 @@ if ($job != ''){
         $result  = 'success';
         $message = 'query success';
         while ($row = mysqli_fetch_array($resultado)) {
-            $functions = '<a title="Registrar Check IN" data-idreservacionhuesped="'.$row['id_reservacion_huesped'].'" data-nombreedificio="'.$row['nombre_edificio'].'" data-numerohabitacion="'.$row['numero_habitacion'].'" data-nombrehuesped="'.$row['nombre_huesped'].'" data-edadhuesped="'.$row['edad_huesped'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_checkin" href="#">Check IN</a> <a title="Registrar Check OUT" data-idreservacionhuesped="'.$row['id_reservacion_huesped'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_checkout" href="#">Check OUT</a>';
+            $functions = '<a title="Registrar Check IN" data-idreservacionhuesped="'.$row['id_reservacion_huesped'].'" data-nombreedificio="'.$row['nombre_edificio'].'" data-numerohabitacion="'.$row['numero_habitacion'].'" data-nombrehuesped="'.$row['nombre_huesped'].'" data-edadhuesped="'.$row['edad_huesped'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_checkin" href="#">Check IN</a> <a title="Registrar Check OUT" data-idreservacionhuesped="'.$row['id_reservacion_huesped'].'" data-nombreedificio="'.$row['nombre_edificio'].'" data-numerohabitacion="'.$row['numero_habitacion'].'" data-nombrehuesped="'.$row['nombre_huesped'].'" data-edadhuesped="'.$row['edad_huesped'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_checkout" href="#">Check OUT</a>';
 
             $mysql_data[] = array(
               //"id_reservacion_huesped" => $row['id_reservacion_huesped'],
@@ -70,13 +70,15 @@ if ($job != ''){
 
         }
     }
-  }  else if ($job == 'check_in') {
+  }  else if ($job == 'registrar_check_in') {
     $txtControlFechaHoraCheckInOut = $_GET['txtControlFechaHoraCheckInOut'];
-
-    $query = "UPDATE reservacion_detalle ";       
-    $query .= "SET fecha_check_in = '".$txtControlFechaHoraCheckInOut."'";
-    $query .= "WHERE id_reservacion_huesped = ".$id;
-    $resultado = mysqli_query($con, $query); 
+    $date = new DateTime($txtControlFechaHoraCheckInOut);
+    $fecha_check_in = $date->format('Y-m-d H:i:s');
+    //print_r($txtControlFechaHoraCheckInOut);
+    $query = "UPDATE reservacion_detalle ";
+    $query .= "SET fecha_check_in = '".$fecha_check_in."'";
+    $query .= " WHERE id_reservacion_detalle = ".$id;
+    $resultado = mysqli_query($con, $query) or die ('Unable to execute query. '. mysqli_error($con));
 
     if (!$resultado){
         $result  = 'error';
@@ -85,12 +87,27 @@ if ($job != ''){
         $result  = 'success';
         $message = 'query success';
 
-        $mysql_data[] = array(
-            "id_tipo_habitacion" => $idultimo
-        );
+        $mysql_data[] = array();
     }
-  } else if ($job == 'check_out') {
-    
+  } else if ($job == 'registrar_check_out') {
+    $txtControlFechaHoraCheckInOut = $_GET['txtControlFechaHoraCheckInOut'];
+    $date = new DateTime($txtControlFechaHoraCheckInOut);
+    $fecha_check_out = $date->format('Y-m-d H:i:s');
+    //print_r($txtControlFechaHoraCheckInOut);
+    $query = "UPDATE reservacion_detalle ";
+    $query .= "SET fecha_check_out = '".$fecha_check_out."'";
+    $query .= " WHERE id_reservacion_detalle = ".$id;
+    $resultado = mysqli_query($con, $query) or die ('Unable to execute query. '. mysqli_error($con));
+
+    if (!$resultado){
+        $result  = 'error';
+        $message = 'query error';
+    } else {
+        $result  = 'success';
+        $message = 'query success';
+
+        $mysql_data[] = array();
+    }
   }
 }
 

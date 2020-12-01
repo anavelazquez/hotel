@@ -6,7 +6,7 @@ $job = '';
 $id  = '';
 if (isset($_GET['job'])) {
   $job = $_GET['job'];
-  if ($job == 'get_habitaciones'  || $job == 'add_habitacion' || $job == 'update_habitacion' || $job == 'delete_habitacion') {
+  if ($job == 'get_habitaciones'  || $job == 'add_habitacion' || $job == 'update_habitacion' || $job == 'delete_habitacion' || $job == 'info_habitacion') {
       if (isset($_GET['id'])){
           $id = $_GET['id'];
           if (!is_numeric($id)){
@@ -36,7 +36,7 @@ if ($job != ''){
   // Execute job
   if ($job == 'get_habitaciones'){
     //descripcion_tipo_habitacion
-    $query =  " SELECT id_habitacion, habitaciones.id_edificio as id_edificio, nombre_edificio, nivel_piso, numero_habitacion, habitaciones.id_tipo_habitacion, descripcion_tipo_habitacion, habitaciones.id_vista, descripcion_vista, habitaciones.id_estatus_habitacion, descripcion_estatus_habitacion, tipos_habitacion.precio
+    $query =  " SELECT id_habitacion, habitaciones.id_edificio as id_edificio, nombre_edificio, nivel_piso, numero_habitacion, habitaciones.id_tipo_habitacion, descripcion_tipo_habitacion, habitaciones.id_vista, descripcion_vista, habitaciones.id_estatus_habitacion, descripcion_estatus_habitacion, tipos_habitacion.precio, capacidad_ninos, capacidad_adultos
                 FROM habitaciones
                 INNER JOIN edificios ON habitaciones.id_edificio = edificios.id_edificio
                 INNER JOIN vistas ON habitaciones.id_vista = vistas.id_vista
@@ -64,6 +64,8 @@ if ($job != ''){
               "descripcion_vista"     => $row['descripcion_vista'],
               "descripcion_estatus_habitacion"     => $row['descripcion_estatus_habitacion'],
               "precio"     => $row['precio'],
+              "capacidad_ninos" => $row['capacidad_ninos'],
+              "capacidad_adultos" => $row['capacidad_adultos'],
               "functions"  => $functions
             );
 
@@ -129,6 +131,8 @@ if ($job != ''){
         $result  = 'success';
         $message = 'query success';
     }
+  }  else if ($job == 'info_habitacion') {
+
   }
 }
 

@@ -1,14 +1,14 @@
-$(document).ready(function(){        
+$(document).ready(function(){
 
     $("#login-form").validate({
         rules: {
             txtUsuario: {
-                required: true                
+                required: true
             },
             txtContrasena: {
-                required: true                
-            }            
-        },        
+                required: true
+            }
+        },
         errorElement : 'div',
         errorPlacement: function(error, element) {
           var placement = $(element).data('error');
@@ -17,14 +17,14 @@ $(document).ready(function(){
           } else {
             error.insertAfter(element);
           }
-        }        
+        }
     });
 
-    $( "#btnIngresar" ).click(function(e) {        
-        e.preventDefault();                            
+    $( "#btnIngresar" ).click(function(e) {
+        e.preventDefault();
         var usr = $("#txtUsuario").val();
-        var pass = $("#txtContrasena").val();        
-                                
+        var pass = $("#txtContrasena").val();
+
         if ($("#login-form").valid()) {
         //if (usr != "" || pass != "") {
             var request = $.ajax({
@@ -35,25 +35,30 @@ $(document).ready(function(){
                 contentType:  'application/json; charset=utf-8',
                 type:         'get'
             });
-            request.done(function(output){    		
-                if (output.result == 'success'){	                                                  
-                    sessionStorage.setItem("usr", usr);	                    
+            request.done(function(output){
+                if (output.result == 'success'){
+                    sessionStorage.setItem("usr", usr);
                     sessionStorage.setItem("idusuario", output.data[0].id_usuario);
-                    sessionStorage.setItem("idempleado", output.data[0].fk_id_empleado);     
-                    sessionStorage.setItem("esadmin", output.data[0].es_admin);                
-                    window.location.href = "dashboard.php";                                            
-                } else {                    
-                    swal('No se encontraron datos');	        	
-                    $("#login-form")[0].reset();                    
+                    sessionStorage.setItem("idempleado", output.data[0].fk_id_empleado);
+                    if(output.data[0].id_rol == 1){
+                        sessionStorage.setItem("esadmin", 'S');
+                    }else{
+                        sessionStorage.setItem("esadmin", 'N');
+                    }
+
+                    window.location.href = "dashboard.php";
+                } else {
+                    swal('No se encontraron datos');
+                    $("#login-form")[0].reset();
                 }
             });
             request.fail(function(jqXHR, textStatus){
-                alert('Ocurrió un detalle al loguearse');      	  
+                alert('Ocurrió un detalle al loguearse');
             });
         } else {
-            swal('Ingrese los datos requeridos');      	  
-        }                 
-    });        
+            swal('Ingrese los datos requeridos');
+        }
+    });
 
     $( document ).ajaxStart(function() {
         $("#div_carga").show();
@@ -65,6 +70,6 @@ $(document).ready(function(){
         $("#div_carga").hide();
         $("#fondo").show();
         $("#contenedor").show();
-    });	
-    
+    });
+
 });

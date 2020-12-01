@@ -35,7 +35,7 @@ if ($job != ''){
 
   // Execute job
   if ($job == 'get_reservaciones') {
-    $query =  " SELECT id_reservacion, CONCAT(c.nombre, ' ', c.primer_apellido, ' ', c.segundo_apellido) nombre_completo, 
+    $query =  " SELECT id_reservacion, CONCAT(c.nombre, ' ', c.primer_apellido, ' ', c.segundo_apellido) nombre_completo,
       h.numero_habitacion nohab, th.descripcion_tipo_habitacion tipohab,
       r.fecha_inicio, r.fecha_fin, r.monto, r.fecha_reservacion, r.id_estatus_reservacion, er.descripcion_estatus_reservacion estatus_reserva
       FROM reservacion r
@@ -53,7 +53,7 @@ if ($job != ''){
       $result  = 'success';
       $message = 'query success';
       while ($row = mysqli_fetch_array($resultado)) {
-        $functions = '<a title="Cancelar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Eliminar</a>';
+        $functions = '<a title="Cancelar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Cancelar</a>';
 
         $mysql_data[] = array(
           "id_reservacion" => $row['id_reservacion'],
@@ -70,6 +70,10 @@ if ($job != ''){
       }
     }
   } else if ($job == 'add_reservacion') {
+    $huespedes = json_decode(file_get_contents('php://input'), true);
+    $arrHuespedes = $huespedes["huespedes"];
+    $longarrayHuespedes = count($arrHuespedes);
+
     $slEdificio = $_GET['slEdificio'];
     $slHabitacion  = $_GET['slHabitacion'];
     $slCliente  = $_GET['slCliente'];
@@ -81,12 +85,30 @@ if ($job != ''){
     $query = "INSERT INTO reservacion (id_cliente, id_habitacion, fecha_inicio, fecha_fin, monto, fecha_reservacion, id_estatus_reservacion)";
     $query .= " VALUES ";
     $query .= "(".$slCliente.",".$slHabitacion.",'".$txtControltxtFechaLlegada."','".$txtControltxtFechaSalida."','".$txtMonto."',CURDATE(),1)";
-
     $resultado = mysqli_query($con, $query);
+    $idReservacion = mysqli_insert_id($con);
+
+
+    if ($longarrayHuespedes != 0) {
+        $queryhuespedes = "";
+        $queryhuespedes = "INSERT INTO reservacion_huespedes (id_reservacion, nombre_huesped, edad_huesped ) VALUES ";
+
+        $separador = "";
+        for ($i = 0; $i < $longarrayHuespedes; $i++) {
+          if ($i + 1 == $longarrayHuespedes) { $separador = ";"; } else { $separador = ","; }
+          $queryhuespedes .= "(".$idReservacion.",'".$arrHuespedes[$i]['nombre']."', ".$arrHuespedes[$i]['edad'].")".$separador." ";
+        }
+        $resqueryhuespedes  = mysqli_query($con, $queryhuespedes) or die ('Unable to execute query. '. mysqli_error($con));
+        if (!$resqueryhuespedes){
+            $result  = 'error';
+            $message = 'query error';
+        }
+      }
+
     if (!$resultado){
         $result  = 'error';
         $message = 'query error';
-    } else {
+    }else {
         $result  = 'success';
         $message = 'query success';
 

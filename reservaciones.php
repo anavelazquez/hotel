@@ -81,69 +81,55 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-4">
-                                    <label for="txtControltxtFechaNacimiento" class="col-form-label">Fecha Llegada:</label>    
-                                    <div class="form-group col-md-12" style="padding-left:0px; padding-right:0px;">                                
-                                        <div class="input-group date" id="txtFechaLlegada" data-target-input="nearest" style="margin-bottom:1rem;">                                
+                                    <label for="txtControltxtFechaNacimiento" class="col-form-label">Fecha Llegada:</label>
+                                    <div class="form-group col-md-12" style="padding-left:0px; padding-right:0px;">
+                                        <div class="input-group date" id="txtFechaLlegada" data-target-input="nearest" style="margin-bottom:1rem;">
                                             <input type="text" id="txtControltxtFechaLlegada" class="form-control datetimepicker-input valid" data-target="#txtFechaLlegada" aria-invalid="false" style="background-color: rgb(255, 255, 204);">
                                             <div id="contentCalendarF" class="input-group-append" data-target="#txtFechaLlegada" data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="simple-icon-calendar"></i></div>
                                             </div>
                                         </div>
-                                    </div>    
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="txtControltxtFechaNacimiento" class="col-form-label">Fecha Salida:</label>    
-                                    <div class="form-group col-md-12" style="padding-left:0px; padding-right:0px;">                                
-                                        <div class="input-group date" id="txtFechaSalida" data-target-input="nearest" style="margin-bottom:1rem;">                                
+                                    <label for="txtControltxtFechaNacimiento" class="col-form-label">Fecha Salida:</label>
+                                    <div class="form-group col-md-12" style="padding-left:0px; padding-right:0px;">
+                                        <div class="input-group date" id="txtFechaSalida" data-target-input="nearest" style="margin-bottom:1rem;">
                                             <input type="text" id="txtControltxtFechaSalida" class="form-control datetimepicker-input valid" data-target="#txtFechaSalida" aria-invalid="false" style="background-color: rgb(255, 255, 204);">
                                             <div id="contentCalendarF" class="input-group-append" data-target="#txtFechaSalida" data-toggle="datetimepicker">
                                                 <div class="input-group-text"><i class="simple-icon-calendar"></i></div>
                                             </div>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="txtMonto" class="col-form-label">Monto:</label>
                                     <input type="text" class="form-control" id="txtMonto" name="txtMonto" maxlength="12" >
                                 </div>
                             </div>
-                            <!--<div class="form-row">        
+                            <!--<div class="form-row">
                                 <label>Huespedes</label>
-                            </div>-->        
-                            <div>Ingrese los huespedes</div>          
+                            </div>-->
+                            <div>Ingrese los huéspedes</div>
                             <div class="form-row">
-                                <div class="form-group col-md-8">                                    
+                                <div class="form-group col-md-8">
                                     <input type="text" class="form-control" id="txtNombreHuesped" name="txtNombreHuesped" placeholder="Nombre huesped">
                                 </div>
-                                <div class="form-group col-md-4">                                    
+                                <div class="form-group col-md-4">
                                     <input type="text" class="form-control" id="txtEdadHuesped" name="txtEdadHuesped" placeholder="Edad">
                                 </div>
-                            </div>   
+                            </div>
                             <div class="form-row">
-                                <table style="width:100%;">
+                                <table style="width:100%;" id="tblHuespedesReservacion">
                                     <tr>
-                                        <th>Nombre huesped</th>
+                                        <th>Nombre huésped</th>
                                         <th>Edad</th>
                                         <th class="text-center">Acción</th>
                                     </tr>
-                                    <tbody id="tdDetalleHuespedes">
-                                        <tr>
-                                            <td>Maria</td>
-                                            <td>45</td>
-                                            <td>
-                                                <a class="btn-remove" href="#"><i class="simple-icon-close"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Miguel</td>
-                                            <td>33</td>
-                                            <td>
-                                                <a class="btn-remove" href="#"><i class="simple-icon-close"></i></a>    
-                                            </td>
-                                        </tr>
+                                    <tbody id="itemlist">
                                     </tbody>
                                 </table>
-                            </div>     
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
