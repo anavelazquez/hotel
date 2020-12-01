@@ -6,7 +6,7 @@ $job = '';
 $id  = '';
 if (isset($_GET['job'])) {
   $job = $_GET['job'];
-  if ($job == 'get_clientes'  || $job == 'add_cliente' || $job == 'update_cliente' || $job == 'delete_cliente') {
+  if ($job == 'get_reservaciones' || $job == 'add_reservacion') {
       if (isset($_GET['id'])){
           $id = $_GET['id'];
           if (!is_numeric($id)){
@@ -34,114 +34,65 @@ if ($job != ''){
   mysqli_set_charset($con,"utf8");
 
   // Execute job
-  if ($job == 'get_clientes'){
-    $query =  " SELECT id_cliente, CONCAT(nombre, ' ', primer_apellido, ' ', segundo_apellido) nombre_completo, nombre, primer_apellido, segundo_apellido, nombre, fecha_registro, usuarios.id_usuario, username
-                FROM clientes
-                INNER JOIN usuarios
-                ON clientes.id_usuario = usuarios.id_usuario";
+  if ($job == 'get_reservaciones') {
+    $query =  " SELECT id_reservacion, CONCAT(c.nombre, ' ', c.primer_apellido, ' ', c.segundo_apellido) nombre_completo, 
+      h.numero_habitacion nohab, th.descripcion_tipo_habitacion tipohab,
+      r.fecha_inicio, r.fecha_fin, r.monto, r.fecha_reservacion, r.id_estatus_reservacion, er.descripcion_estatus_reservacion estatus_reserva
+      FROM reservacion r
+        INNER JOIN clientes c ON c.id_cliente = r.id_cliente
+        INNER JOIN estatus_reservacion er ON er.id_estatus_reservacion = r.id_estatus_reservacion
+        INNER JOIN habitaciones h ON h.id_habitacion = r.id_habitacion
+        INNER JOIN tipos_habitacion th ON th.id_tipo_habitacion = h.id_tipo_habitacion";
 
-    $resultado = mysqli_query($con, $query);
-
-    if (!$resultado){
-        $result  = 'error';
-        $message = 'query error';
-    } else {
-        $result  = 'success';
-        $message = 'query success';
-        while ($row = mysqli_fetch_array($resultado)) {
-            $functions = '<a title="Editar cliente '.$row['id_cliente'].'" data-idcliente="'.$row['id_cliente'].'" data-nombre="'.$row['nombre'].'" data-primer_apellido="'.$row['primer_apellido'].'" data-segundo_apellido="'.$row['segundo_apellido'].'" data-fecha_registro="'.$row['fecha_registro'].'" data-idusuario="'.$row['id_usuario'].'" data-username="'.$row['username'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_edit" href="#">Editar</a> <a title="Eliminar cliente '.$row['id_cliente'].'" data-idcliente="'.$row['id_cliente'].'" data-idusuario="'.$row['id_usuario'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Eliminar</a>';
-
-            $mysql_data[] = array(
-              "id_cliente" => $row['id_cliente'],
-              "nombre_completo"     => $row['nombre_completo'],
-              "fecha_registro"  => $row['fecha_registro'],
-              "functions"  => $functions
-            );
-        }
-    }
-  }  else if ($job == 'add_cliente') {
-    $txtNombre = $_GET['txtNombre'];
-    $txtPrimerApellido = $_GET['txtPrimerApellido'];
-    $txtSegundoApellido = $_GET['txtSegundoApellido'];
-    $txtUsername = $_GET['txtUsername'];
-    $txtPassword = $_GET['txtPassword'];
-
-    //Se agrega usuario
-    $query = "INSERT INTO usuarios (id_rol, username, password)";
-    $query .= " VALUES ";
-    $query .= "(3,'".$txtUsername."','".$txtPassword."')";
-    $resultadoUsuario = mysqli_query($con, $query);
-
-    //Se recupera id_usuario
-    $idUsuario = mysqli_insert_id($con);
-
-    //Se agrega cliente
-    $query2 = "INSERT INTO clientes (id_usuario, nombre, primer_apellido, segundo_apellido, fecha_registro)";
-    $query2 .= "VALUES ";
-    $query2 .= "(".$idUsuario.",'".$txtNombre."','".$txtPrimerApellido."','".$txtSegundoApellido."', CURDATE()) ";
-    $resultado = mysqli_query($con, $query2);
-    $idultimo = mysqli_insert_id($con);
-
+    $resultado = mysqli_query($con, $query) or die ('Unable to execute query. '. mysqli_error($con));
 
     if (!$resultado){
-        $result  = 'error';
-        $message = 'query error';
+      $result  = 'error';
+      $message = 'query error';
     } else {
-        $result  = 'success';
-        $message = 'query success';
+      $result  = 'success';
+      $message = 'query success';
+      while ($row = mysqli_fetch_array($resultado)) {
+        $functions = '<a title="Cancelar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Eliminar</a>';
 
         $mysql_data[] = array(
-            "id_cliente" => $idultimo
+          "id_reservacion" => $row['id_reservacion'],
+          "nombre_completo"  => $row['nombre_completo'],
+          "nohab"  => $row['nohab'],
+          "tipohab"  => $row['tipohab'],
+          "fecha_inicio"  => $row['fecha_inicio'],
+          "fecha_fin"     => $row['fecha_fin'],
+          "monto"     => $row['monto'],
+          "fecha_reservacion"     => $row['fecha_reservacion'],
+          "estatus_reserva"     => $row['estatus_reserva'],
+          "functions"  => $functions
         );
+      }
     }
-  } else if ($job == 'update_cliente') {
-    $txtNombre = $_GET['txtNombre'];
-    $txtPrimerApellido = $_GET['txtPrimerApellido'];
-    $txtSegundoApellido = $_GET['txtSegundoApellido'];
-    $txtUsername = $_GET['txtUsername'];
-    $txtPassword = $_GET['txtPassword'];
-    $idUsuario = $_GET['id_usuario'];
+  } else if ($job == 'add_reservacion') {
+    $slEdificio = $_GET['slEdificio'];
+    $slHabitacion  = $_GET['slHabitacion'];
+    $slCliente  = $_GET['slCliente'];
+    $txtControltxtFechaLlegada = $_GET['txtControltxtFechaLlegada'];
+    $txtControltxtFechaSalida  = $_GET['txtControltxtFechaSalida'];
+    $txtMonto = $_GET['txtMonto'];
 
-    $query = "UPDATE clientes ";
-    $query .= "SET nombre = '".$txtNombre."', primer_apellido = '".$txtPrimerApellido."', segundo_apellido = '".$txtSegundoApellido."'";
-    $query .= "WHERE id_cliente = ".$id;
+    //Se agrega reservacion
+    $query = "INSERT INTO reservacion (id_cliente, id_habitacion, fecha_inicio, fecha_fin, monto, fecha_reservacion, id_estatus_reservacion)";
+    $query .= " VALUES ";
+    $query .= "(".$slCliente.",".$slHabitacion.",'".$txtControltxtFechaLlegada."','".$txtControltxtFechaSalida."','".$txtMonto."',CURDATE(),1)";
+
     $resultado = mysqli_query($con, $query);
-
-    $query2 = "UPDATE usuarios ";
-    $query2 .= "SET username = '".$txtUsername."', password = '".$txtPassword."' ";
-    $query2 .= "WHERE id_usuario = ".$idUsuario;
-    $resultado2 = mysqli_query($con, $query2);
-
-    if (!$resultado){
-      $result  = 'error';
-      $message = 'query error clientes';
-    }else if(!$resultado2){
-      $result  = 'error';
-      $message = 'query error usuarios';
-    }else{
-        $result  = 'success';
-        $message = 'query success';
-    }
-  }  else if ($job == 'delete_cliente') {
-    $idUsuario = $_GET['id_usuario'];
-
-    $query = "DELETE FROM clientes ";
-    $query .= "WHERE id_cliente = ".$id;
-    $resultado = mysqli_query($con, $query);
-
-    $query2 = "DELETE FROM usuarios ";
-    $query2 .= "WHERE id_usuario = ".$idUsuario;
-    $resultado2 = mysqli_query($con, $query2);
-
     if (!$resultado){
         $result  = 'error';
         $message = 'query error';
-    }else if(!$resultado2){
-      $result  = 'error';
-      $message = 'query error usuarios';
-    }else {
+    } else {
         $result  = 'success';
         $message = 'query success';
+
+        /*$mysql_data[] = array(
+            "id_cliente" => $idultimo
+        );*/
     }
   }
 }

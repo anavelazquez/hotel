@@ -1,10 +1,16 @@
 var table_clientes = $('#data-table-simple').dataTable({
     "paging": true,
-    "ajax": "http://" + usourl + "/php/clientes.func.php?job=get_clientes",
+    "ajax": "http://" + usourl + "/php/reservaciones.func.php?job=get_reservaciones",
     "columns": [
-        { "data": "id_cliente" },
+        { "data": "id_reservacion" },
         { "data": "nombre_completo" },
-        { "data": "fecha_registro" },
+        { "data": "nohab" },
+        { "data": "tipohab" },
+        { "data": "fecha_inicio" },
+        { "data": "fecha_fin" },
+        { "data": "monto" },
+        { "data": "fecha_reservacion" },
+        { "data": "estatus_reserva" },
         { "data": "functions" }
     ],
     "aoColumnDefs": [
@@ -25,7 +31,7 @@ var table_clientes = $('#data-table-simple').dataTable({
     }
   });
 
-var validatorClientes = $("#form-clientes").validate({
+/*var validatorClientes = $("#form-clientes").validate({
     rules: {
         txtNombre: {
             required: true
@@ -40,14 +46,24 @@ var validatorClientes = $("#form-clientes").validate({
         error.insertAfter(element);
       }
     }
-});
+});*/
 
+getEdificios();
+getHabitacion();
+getClientes();
+
+$(function () {
+    $('#txtFechaLlegada, #txtFechaSalida').datetimepicker({
+        format: 'YYYY-MM-DD',
+        pickTime: false 
+    });
+});
 
 $( "#btnAgregar" ).click(function() {
     sessionStorage.setItem("accion","nuevo");
     $("#modalActualiza").modal();
-    validatorClientes.resetForm();
-    $('#form-clientes')[0].reset();
+    //validatorClientes.resetForm();
+    $('#form-reservacion')[0].reset();
 });
 
 $(document).on('click', '.function_edit', function(e){
@@ -105,8 +121,8 @@ $(document).on('click', '.function_delete', function(e){
 
 
 $( "#btnGuardar" ).click(function() {
-    if ($("#form-clientes").valid()) {
-        swal({   title: "¿Está seguro que desea guardar?",
+    if ($("#form-reservacion").valid()) {
+        swal({   title: "¿Está seguro que desea realizar la reservación?",
         text: "",
         type: "warning",
         showCancelButton: true,
@@ -120,17 +136,24 @@ $( "#btnGuardar" ).click(function() {
             if (isConfirm) {
                 var accion_cat;
                 if (sessionStorage.getItem("accion") == "nuevo") {
-                    accion_cat = "add_cliente";
+                    accion_cat = "add_reservacion";
                 } else if (sessionStorage.getItem("accion") == "editar") {
-                    accion_cat = "update_cliente";
+                    accion_cat = "update_reservacion";
                 }
-                var form_data = "txtNombre="+$("#txtNombre").val()+"&txtPrimerApellido="+$("#txtPrimerApellido").val()+"&txtSegundoApellido="+$("#txtSegundoApellido").val()+"&txtUsername="+$("#txtUsername").val()+"&txtPassword="+$("#txtPassword").val();
+                /*$slEdificio = $_GET['slEdificio'];
+                $slHabitacion  = $_GET['slHabitacion'];
+                $slCliente  = $_GET['slCliente'];
+                $txtControltxtFechaLlegada = $_GET['txtControltxtFechaLlegada'];
+                $txtControltxtFechaSalida  = $_GET['txtControltxtFechaSalida'];
+                $txtMonto = $_GET['txtMonto'];*/
+                var form_data = "slEdificio="+$("#slEdificio").val()+"&slHabitacion="+$("#slHabitacion").val()+"&slCliente="+$("#slCliente").val()+"&txtControltxtFechaLlegada="+$("#txtControltxtFechaLlegada").val()+"&txtControltxtFechaSalida="+$("#txtControltxtFechaSalida").val()+"&txtMonto="+$("#txtMonto").val();
                 var request   = $.ajax({
-                    url:          'http://' + usourl + '/php/clientes.func.php?job='+accion_cat+'&'+form_data+'&id='+sessionStorage.getItem("idcliente")+'&id_usuario='+sessionStorage.getItem("idusuario"),
+                    //url:          'http://' + usourl + '/php/reservaciones.func.php?job='+accion_cat+'&'+form_data+'&id='+sessionStorage.getItem("idcliente")+'&id_usuario='+sessionStorage.getItem("idusuario"),
+                    url:          'http://' + usourl + '/php/reservaciones.func.php?job='+accion_cat+'&'+form_data,
                     cache:        false,
                     dataType:     'json',
                     contentType:  'application/json; charset=utf-8',
-                    type:         'get'
+                    type:         'post'
                 });
                 request.done(function(output){
                     if (output.result == 'success'){
@@ -139,7 +162,7 @@ $( "#btnGuardar" ).click(function() {
                             type: "success"
                             },
                             function(){
-                                window.location = "clientes.php";
+                                window.location = "reservaciones.php";
                         });
                     } else {
                         swal("Error", "No se pudo realizar la acción", "error");
@@ -151,3 +174,78 @@ $( "#btnGuardar" ).click(function() {
         });
     }
 });
+
+function getEdificios(){
+    var request   = $.ajax({
+    url:          'http://' + usourl + '/php/edificios.func.php?job=get_edificios',
+    cache:        false,
+    dataType:     'json',
+    contentType:  'application/json; charset=utf-8',
+    type:         'get'
+    });
+    request.done(function(output){        
+    if (output.result == 'success'){      
+        var dataslEdificio = "<option value='' disabled='' selected=''>Seleccione edificio</option>";           			
+        for (i = 0; i < output.data.length; ++i) {          												
+            dataslEdificio += "<option value='" + output.data[i].id_edificio + "'>" + output.data[i].nombre_edificio + "</option>";
+        }
+        $("#slEdificio").html(dataslEdificio);                
+        $("#slEdificio").combobox();
+    } else {
+        alert('Add request failed');          
+    }
+    });
+    request.fail(function(jqXHR, textStatus){
+        alert('Add request failed: ' + textStatus);       
+    });
+}
+
+function getHabitacion(){
+    var request   = $.ajax({
+    url:          'http://' + usourl + '/php/habitaciones.func.php?job=get_habitaciones',
+    cache:        false,
+    dataType:     'json',
+    contentType:  'application/json; charset=utf-8',
+    type:         'get'
+    });
+    request.done(function(output){        
+    if (output.result == 'success'){      
+        var dataslHabitacion = "<option value='' disabled='' selected=''>Seleccione habitación</option>";           			
+        for (i = 0; i < output.data.length; ++i) {          												
+            dataslHabitacion += "<option value='" + output.data[i].id_habitacion + "' data-preciohabitacion='" + output.data[i].precio + "'>" + output.data[i].numero_habitacion + "</option>";
+        }
+        $("#slHabitacion").html(dataslHabitacion);                
+        $("#slHabitacion").combobox();
+    } else {
+        alert('Add request failed');          
+    }
+    });
+    request.fail(function(jqXHR, textStatus){
+        alert('Add request failed: ' + textStatus);       
+    });
+}
+
+function getClientes(){
+    var request   = $.ajax({
+    url:          'http://' + usourl + '/php/clientes.func.php?job=get_clientes',
+    cache:        false,
+    dataType:     'json',
+    contentType:  'application/json; charset=utf-8',
+    type:         'get'
+    });
+    request.done(function(output){        
+    if (output.result == 'success'){      
+        var dataslClientes = "<option value='' disabled='' selected=''>Seleccione cliente</option>";           			
+        for (i = 0; i < output.data.length; ++i) {          												
+            dataslClientes += "<option value='" + output.data[i].id_cliente + "'>" + output.data[i].nombre_completo + "</option>";
+        }
+        $("#slCliente").html(dataslClientes);                
+        $("#slCliente").combobox();
+    } else {
+        alert('Add request failed');          
+    }
+    });
+    request.fail(function(jqXHR, textStatus){
+        alert('Add request failed: ' + textStatus);       
+    });
+}
