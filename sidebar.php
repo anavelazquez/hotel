@@ -3,7 +3,7 @@
         <div class="scroll">
             <ul class="list-unstyled">
                 <li class="active"><a href="dashboard.php"><i class="iconsmind-Dashboard"></i><span>Dashboard</span></a></li>
-                <li><a href="agenda.php"><i class="simple-icon-calendar"></i> <span>Reservaciones</span></a></li>   
+                <li><a href="reservaciones.php"><i class="simple-icon-calendar"></i> <span>Reservaciones</span></a></li>   
                 <li><a href="#administracion"><i class="iconsmind-Administrator"></i><span>Administración</span></a></li>                      
             </ul>
         </div>

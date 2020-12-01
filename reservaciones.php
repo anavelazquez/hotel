@@ -70,42 +70,22 @@
                             </div>
 
                             <div class="form-row">
-
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group col-md-4" id="reloadSlCliente">
+                                <div class="form-group col-md-12" id="reloadSlCliente">
+                                    <label for="slCliente">Cliente</label>
                                     <select id="slCliente" name="slCliente" class="form-control">
                                     </select>
                                 </div>
-                                <div class="form-group col-md-1">
-                                    <button type="button" id="btnModalAgregaCliente" class="btn btn-primary default mb-1" data-toggle="tooltip" data-placement="top" title="" data-original-title="Agregar cliente"><i class="glyph-icon simple-icon-user-follow"></i></button>
-                                </div>
                             </div>
 
 
+                            fecha_llegada
+                            fecha_salida
+                            monto_total
+
+                            Huespedes
 
 
-                            <div class="form-group">
-                                <label for="txtNombre" class="col-form-label">Nombre:</label>
-                                <input type="text" class="form-control" id="txtNombre" name="txtNombre" maxlength="180" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtPrimerApellido" class="col-form-label">Primer Apellido:</label>
-                                <input type="text" class="form-control" id="txtPrimerApellido" name="txtPrimerApellido" maxlength="180" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtSegundoApellido" class="col-form-label">Segundo Apellido:</label>
-                                <input type="text" class="form-control" id="txtSegundoApellido" name="txtSegundoApellido" maxlength="180" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtUsername" class="col-form-label">Nombre de usuario:</label>
-                                <input type="text" class="form-control" id="txtUsername" name="txtUsername" maxlength="180" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="txtPassword" class="col-form-label">Contraseña:</label>
-                                <input type="text" class="form-control" id="txtPassword" name="txtPassword" maxlength="180" required>
-                            </div>
+                            
                         </form>
                     </div>
                     <div class="modal-footer">
