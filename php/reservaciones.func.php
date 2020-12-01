@@ -53,7 +53,7 @@ if ($job != ''){
       $result  = 'success';
       $message = 'query success';
       while ($row = mysqli_fetch_array($resultado)) {
-        $functions = '<a title="Editar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_edit" href="#">Editar</a>   <a title="Eliminar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Eliminar</a>';
+        $functions = '<a title="Cancelar reservación" data-idreservacion="'.$row['id_reservacion'].'" class="btn-floating waves-effect waves-light blue modal-trigger function_delete" href="#">Eliminar</a>';
 
         $mysql_data[] = array(
           "id_reservacion" => $row['id_reservacion'],
