@@ -36,7 +36,7 @@ if ($job != ''){
   // Execute job
   if ($job == 'get_habitaciones'){
     //descripcion_tipo_habitacion
-    $query =  " SELECT id_habitacion, habitaciones.id_edificio as id_edificio, nombre_edificio, nivel_piso, numero_habitacion, habitaciones.id_tipo_habitacion, descripcion_tipo_habitacion, habitaciones.id_vista, descripcion_vista, habitaciones.id_estatus_habitacion, descripcion_estatus_habitacion
+    $query =  " SELECT id_habitacion, habitaciones.id_edificio as id_edificio, nombre_edificio, nivel_piso, numero_habitacion, habitaciones.id_tipo_habitacion, descripcion_tipo_habitacion, habitaciones.id_vista, descripcion_vista, habitaciones.id_estatus_habitacion, descripcion_estatus_habitacion, tipos_habitacion.precio
                 FROM habitaciones
                 INNER JOIN edificios ON habitaciones.id_edificio = edificios.id_edificio
                 INNER JOIN vistas ON habitaciones.id_vista = vistas.id_vista
@@ -63,6 +63,7 @@ if ($job != ''){
               "descripcion_tipo_habitacion"     => $row['descripcion_tipo_habitacion'],
               "descripcion_vista"     => $row['descripcion_vista'],
               "descripcion_estatus_habitacion"     => $row['descripcion_estatus_habitacion'],
+              "precio"     => $row['precio'],
               "functions"  => $functions
             );
 
